@@ -1,6 +1,6 @@
-# Competitive Pong
+# Multiplayer Room
 
-Multiplayer environment for real-time movement using SFML and networking.
+Multiplayer room made using SFML and Enet libraries.
 
 ### Controls
 - Use `Z` `Q` `S` `D` to move the player.
