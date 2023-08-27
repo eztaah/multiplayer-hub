@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Project name
-project(multiplayer-room) 
+project(server-multiplayer-room) 
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 23)
@@ -10,26 +10,14 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Include directories, CMake will inform the compiler to also look in this directory when resolving #include directives.
-include_directories(lib/SFML/include)
-include_directories(src/core)
-include_directories(src/entities)
-include_directories(src/utils)
+include_directories(lib/enet/include)
 
 # Link directories (where the .a or .lib files are located)
-link_directories(lib/SFML/lib)
+link_directories(lib/enet/lib)
 
 # Source files 
 set(SOURCE_FILES
     src/main.cpp
-
-    src/utils/config.hpp
-    src/utils/config.cpp
-
-    src/core/Game.hpp
-    src/core/Game.cpp
-
-    src/entities/Player.hpp
-    src/entities/Player.cpp
 )
 
 ##############
@@ -47,7 +35,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     # -g: Cela permet au débogueur de montrer des valeurs de variable, de naviguer dans le code source.
 
     # Relie les différentes libraries à l'executable
-    target_link_libraries(debug sfml-system sfml-window sfml-graphics)
+    target_link_libraries(debug ${CMAKE_SOURCE_DIR}/lib/enet/lib/enet64.lib Ws2_32 Winmm)
 endif()
 
 # Set compiler options for Release build
@@ -60,7 +48,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     # Les options ou cibles spécifiées sont utilisées uniquement pour la cible sur laquelle vous appelez la commande. Elles ne sont pas propagées aux cibles qui sont liées à celle-ci.
 
     # Relie les différentes libraries à l'executable
-    target_link_libraries(release sfml-system sfml-window)
+    target_link_libraries(release ${CMAKE_SOURCE_DIR}/lib/enet/lib/enet64.lib)
 endif()
 
 

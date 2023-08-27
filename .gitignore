@@ -1,5 +1,9 @@
 # Ignore the build directory
-build/
+client/build/
+server/build/
 
 # Ignore the executable created
-bin/debug.exe
+client/bin/debug.exe
+client/bin/release.exe
+server/bin/debug.exe
+server/bin/release.exe
