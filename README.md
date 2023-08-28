@@ -10,7 +10,7 @@ Multiplayer room made using SFML and Enet libraries.
 # Building and Development
 
 ## Informations
-- Project developed using the [SFML](https://www.sfml-dev.org/) and [enet](https://github.com/lsalzman/enet) library.
+- Project developed using the [SFML](https://www.sfml-dev.org/) and [ENet](http://enet.bespin.org/index.html) library.
 
 ## Prerequisites
 - Any compiler
