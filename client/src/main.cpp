@@ -1,34 +1,20 @@
 #include "Game.hpp"
 #include "config.hpp"
-#include "NetworkClient.hpp"
 #include <SFML/Graphics.hpp>
-#include <enet/enet.h>
 #include <iostream>
 
 
-int main()
-{
-    // Create a window with dimensions 800x600 pixels
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML Window Test");
-    window.setFramerateLimit(60);
+int main() {
 
-    // Initialize the client
-    NetworkClient client = NetworkClient();
-    // Connect the client to the server
-    if(!client.connectToServer("localhost", 7000))
-        return EXIT_FAILURE;
+    // Create a window with dimensions 800x600 pixels
+    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Multiplayer Hub");
+    window.setFramerateLimit(60);
 
     Game game = Game(window);
 
     // Main loop that continues until the window is closed
     while (window.isOpen())
     {
-        // If the spacebar is pressed, send a packet to the server
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-            client.sendPacket("Spacebar pressed");
-
-        // Handle incoming events
-        client.handleEvents();
 
         //// UPDATE ///
         game.Update();
@@ -38,9 +24,25 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            // Close window: exit
-            if (event.type == sf::Event::Closed) {
-                window.close();
+            switch (event.type)
+            {
+                // If the window close
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+
+                // Si la fenetres est en focus
+                case sf::Event::GainedFocus:
+                    WINDOW_IS_FOCUSED = true;
+                    break;
+
+                // Si la fenetre n'est plus en focus
+                case sf::Event::LostFocus:
+                    WINDOW_IS_FOCUSED = false;
+                    break;
+
+                default:
+                    break;
             }
         }
     }

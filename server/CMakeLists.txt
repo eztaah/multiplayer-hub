@@ -10,10 +10,12 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Include directories, CMake will inform the compiler to also look in this directory when resolving #include directives.
-include_directories(lib/enet/include)
+include_directories(lib/ENet/include)
+include_directories(lib/SFML/include)
 
 # Link directories (where the .a or .lib files are located)
-link_directories(lib/enet/lib)
+link_directories(lib/ENet/lib)
+link_directories(lib/SFML/lib)
 
 # Source files 
 set(SOURCE_FILES
@@ -35,21 +37,24 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     # -g: Cela permet au débogueur de montrer des valeurs de variable, de naviguer dans le code source.
 
     # Relie les différentes libraries à l'executable
-    target_link_libraries(debug ${CMAKE_SOURCE_DIR}/lib/enet/lib/enet64.lib Ws2_32 Winmm)
+    target_link_libraries(debug ${CMAKE_SOURCE_DIR}/lib/enet/lib/enet64.lib Ws2_32 Winmm sfml-system sfml-window sfml-graphics)
 endif()
 
-# Set compiler options for Release build
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    # Indique quels sont les fichiers à compiler
-    add_executable(release ${SOURCE_FILES})     # <- this is the target
 
-    target_compile_options(release PRIVATE -O3)
-    # -03 : optimise le code pour que le programme soit plus rapide
-    # Les options ou cibles spécifiées sont utilisées uniquement pour la cible sur laquelle vous appelez la commande. Elles ne sont pas propagées aux cibles qui sont liées à celle-ci.
 
-    # Relie les différentes libraries à l'executable
-    target_link_libraries(release ${CMAKE_SOURCE_DIR}/lib/enet/lib/enet64.lib)
-endif()
+
+# # Set compiler options for Release build
+# if(CMAKE_BUILD_TYPE STREQUAL "Release")
+#     # Indique quels sont les fichiers à compiler
+#     add_executable(release ${SOURCE_FILES})     # <- this is the target
+
+#     target_compile_options(release PRIVATE -O3)
+#     # -03 : optimise le code pour que le programme soit plus rapide
+#     # Les options ou cibles spécifiées sont utilisées uniquement pour la cible sur laquelle vous appelez la commande. Elles ne sont pas propagées aux cibles qui sont liées à celle-ci.
+
+#     # Relie les différentes libraries à l'executable
+#     target_link_libraries(release ${CMAKE_SOURCE_DIR}/lib/enet/lib/enet64.lib)
+# endif()
 
 
 

@@ -5,49 +5,50 @@
 
 
 const float DEFAULT_SPEED = 300.0f;       /// Default speed of the player.
-const float DEFAULT_FRAME_TIME = 0.016;   /// Default frame time, assuming 60 FPS.
+const sf::Vector2f DEFAULT_SIZE = {30.0f, 30.0f};
 
 
-/**
- * Constructs a new Player object.
- * Initializes the player attributes.
- */
-Player::Player()
-    : _position(600.0f, 300.0f),
+
+Player::Player(const int id, const sf::Vector2f& position, const sf::Color& color)
+    : _id(id),
+      _position(position),
       _speed(DEFAULT_SPEED),
-      _size(30.0f, 30.0f),
+      _size(DEFAULT_SIZE),
       _shape(_size)
 {
-    _shape.setFillColor(sf::Color::Green);
+    _shape.setFillColor(color);
     _shape.setPosition(_position);
 }
 
-/**
- * Updates the player's position based on keyboard inputs.
- */
-void Player::Update()
-{
-    // Keyboard controls
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-        _position.y -= _speed * DEFAULT_FRAME_TIME;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        _position.y += _speed * DEFAULT_FRAME_TIME;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-        _position.x -= _speed * DEFAULT_FRAME_TIME;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        _position.x += _speed * DEFAULT_FRAME_TIME;
-
-    // Boundary checks
-    //assert(_position.x >= 0.0f && _position.x <= WINDOW_WIDTH && "The player is outside the screen");
-    //assert(_position.y >= 0.0f && _position.y <= WINDOW_HEIGHT && "The player is outside the screen");
-    
-    _shape.setPosition(_position);
+// === Accessors ===
+int Player::GetId() const {
+    return _id;
 }
 
-/**
- * Render the player
- */
-void Player::Render(sf::RenderWindow& window) const
+float Player::GetSpeed() const {
+    return _speed;
+}
+
+sf::Vector2f Player::GetPosition() const {
+    return _position;
+}
+
+
+
+// === Mutators ===
+void Player::SetPosition(const sf::Vector2f& newPosition) {
+    _position = newPosition;
+}
+
+void Player::MoveBy(const sf::Vector2f& movement) {
+    _position.x += movement.x;
+    _position.y += movement.y;
+}
+
+
+// === Rendering ===
+void Player::Render(sf::RenderWindow& window)
 {
+    _shape.setPosition(_position);
     window.draw(_shape);
 }

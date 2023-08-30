@@ -15,8 +15,8 @@ include_directories(lib/ENet/include)
 include_directories(src/utils)
 include_directories(src/game/core)
 include_directories(src/game/entities)
-include_directories(src/networking)
-
+include_directories(src/game/manager)
+include_directories(src/game/networking)
 
 # Link directories (where the .a or .lib files are located)
 link_directories(lib/SFML/lib)
@@ -32,9 +32,10 @@ set(SOURCE_FILES
     src/game/core/Game.cpp
     src/game/entities/Player.hpp
     src/game/entities/Player.cpp
-
-    src/networking/NetworkClient.cpp
-    src/networking/NetworkClient.hpp
+    src/game/manager/PlayerManager.hpp
+    src/game/manager/PlayerManager.cpp
+    src/game/networking/NetworkInterface.hpp
+    src/game/networking/NetworkInterface.cpp
 )
 
 ##############
@@ -46,27 +47,27 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 # Set compiler options for Debug build
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     # Indique quels sont les fichiers à compiler
-    add_executable(debug ${SOURCE_FILES})     # <- this is the target
+    add_executable(debug1 ${SOURCE_FILES})     # <- this is the target
 
-    target_compile_options(debug PRIVATE -Wall -Wextra -g)
+    target_compile_options(debug1 PRIVATE -Wall -Wextra -g)
     # -g: Cela permet au débogueur de montrer des valeurs de variable, de naviguer dans le code source.
 
     # Relie les différentes libraries à l'executable
-    target_link_libraries(debug ${CMAKE_SOURCE_DIR}/lib/enet/lib/enet64.lib Ws2_32 Winmm sfml-system sfml-window sfml-graphics)
+    target_link_libraries(debug1 ${CMAKE_SOURCE_DIR}/lib/enet/lib/enet64.lib Ws2_32 Winmm sfml-system sfml-window sfml-graphics)
 endif()
 
-# Set compiler options for Release build
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    # Indique quels sont les fichiers à compiler
-    add_executable(release ${SOURCE_FILES})     # <- this is the target
+# # Set compiler options for Release build
+# if(CMAKE_BUILD_TYPE STREQUAL "Release")
+#     # Indique quels sont les fichiers à compiler
+#     add_executable(release ${SOURCE_FILES})     # <- this is the target
 
-    target_compile_options(release PRIVATE -O3)
-    # -03 : optimise le code pour que le programme soit plus rapide
-    # Les options ou cibles spécifiées sont utilisées uniquement pour la cible sur laquelle vous appelez la commande. Elles ne sont pas propagées aux cibles qui sont liées à celle-ci.
+#     target_compile_options(release PRIVATE -O3)
+#     # -03 : optimise le code pour que le programme soit plus rapide
+#     # Les options ou cibles spécifiées sont utilisées uniquement pour la cible sur laquelle vous appelez la commande. Elles ne sont pas propagées aux cibles qui sont liées à celle-ci.
 
-    # Relie les différentes libraries à l'executable
-    target_link_libraries(release enet sfml-system sfml-window sfml-graphics)
-endif()
+#     # Relie les différentes libraries à l'executable
+#     target_link_libraries(release enet sfml-system sfml-window sfml-graphics)
+# endif()
 
 
 
