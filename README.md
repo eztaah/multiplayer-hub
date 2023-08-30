@@ -1,6 +1,6 @@
-# Multiplayer Room
+# Multiplayer Hub
 
-Multiplayer room made using SFML and Enet libraries.
+Multiplayer hub made using SFML and Enet libraries.
 
 ### Controls
 - Use `Z` `Q` `S` `D` to move the player.
@@ -33,10 +33,6 @@ cd build
 4. Generate the makefiles:
 ```
 cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug ..  
-```
-or 
-```
-cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ..  
 ```
 
 5. Compile the project : (assuming that you use the minGW compiler)   
