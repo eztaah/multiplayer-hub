@@ -1,8 +1,10 @@
 #pragma once
 #include "enet/enet.h"
+#include "global.hpp"
 #include <vector>
 #include <string>
 #include <SFML/System.hpp>
+
 
 ////////// SINGLETON /////
 class NetworkInterface
@@ -17,22 +19,25 @@ public:
 
     void Initialize();
     void Deinitialize();
-    bool ConnectToServer(const char* host, unsigned short port);
 
     // === Send packets ===
-    void SendNewPositionToServer(int myId, sf::Vector2f newPosition);
+    void SendIdToClient(ENetPeer* peer, int clientId);
+    void SendIdsOfAllConnectedPlayers(ENetPeer* peer, const std::vector<Client>& clientsArray);
+    void SendNewPlayerConnectedToEveryone(ENetPeer* peer, int clientId);
+    void SendNewPlayerPositionToEveryone(ENetPeer* peer, int playerId, const sf::Vector2f newClientPosition);
+    void SendIdPlayerDisconnectedToEveryone(ENetPeer* peer, int clientId);
+
 
     // === Receving events ===
-   std::vector<ENetEvent> GetAllEvents();
-   std::vector<std::string> OpenPacket(ENetPacket*& packet);
+    std::vector<ENetEvent> GetAllEvents();
+    std::vector<std::string> OpenPacket(ENetPacket*& packet);
 
 
 private:
+
+    ENetHost *_server;
     std::vector<ENetEvent> _eventsArray;
-
-    ENetHost *_client;
-    ENetPeer *_peer;
-
+    
     NetworkInterface();
     ~NetworkInterface();
 };

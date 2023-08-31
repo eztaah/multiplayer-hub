@@ -12,6 +12,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Include directories, CMake will inform the compiler to also look in this directory when resolving #include directives.
 include_directories(lib/ENet/include)
 include_directories(lib/SFML/include)
+include_directories(src/core)
+include_directories(src/networking)
+include_directories(src/utils)
 
 # Link directories (where the .a or .lib files are located)
 link_directories(lib/ENet/lib)
@@ -20,6 +23,14 @@ link_directories(lib/SFML/lib)
 # Source files 
 set(SOURCE_FILES
     src/main.cpp
+    
+    src/core/serve.hpp
+    src/core/serve.cpp
+
+    src/networking/NetworkInterface.hpp
+    src/networking/NetworkInterface.cpp
+
+    src/utils/global.hpp
 )
 
 ##############

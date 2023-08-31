@@ -14,7 +14,6 @@ public:
 
     // === Mutators ===
     void SetPosition(const sf::Vector2f& newPosition);
-    void MoveBy(const sf::Vector2f& movement);
 
     // === Rendering ===
     void Render(sf::RenderWindow& window); // Render player on the window

@@ -14,7 +14,8 @@ public:
 
 private:
     void _HandleInputs();
-    void _HandlePackets();
+    void _HandleEvents();
+    void _HandlePackets(ENetPacket* packet);
 
     PlayerManager _playerManager;
     sf::RenderWindow& _window;
@@ -23,4 +24,6 @@ private:
 
     sf::Time _lastUpdateTimeEvent1;
     sf::Clock _clock;
+
+    bool _running;
 };

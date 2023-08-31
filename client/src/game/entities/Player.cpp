@@ -34,15 +34,9 @@ sf::Vector2f Player::GetPosition() const {
 }
 
 
-
 // === Mutators ===
 void Player::SetPosition(const sf::Vector2f& newPosition) {
     _position = newPosition;
-}
-
-void Player::MoveBy(const sf::Vector2f& movement) {
-    _position.x += movement.x;
-    _position.y += movement.y;
 }
 
 

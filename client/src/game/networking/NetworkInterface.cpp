@@ -1,6 +1,5 @@
 #include "NetworkInterface.hpp"
 #include <iostream>
-#include <iostream>
 #include <iomanip>
 #include <sstream>
 
@@ -26,29 +25,14 @@ NetworkInterface::~NetworkInterface() {}
 //////////////////// UTILS //////////////////////
 enum sendToServer
 {
-    ASK_ID = 1,   // 1 | null
-    ASK_PLAYERS_ALREADY_CONNECTED = 2,  // 2 | null
-    SEND_NEW_POS = 3,    // 1 | id | posX | posY
+    SEND_NEW_POS = 1,    // 1 | id | posX | posY
 };
 
 
-std::string OpenPacket(ENetPacket* packet)
-{
-    // Récupère le paquet
-    unsigned char* data = packet->data;      // Récupère le contenu de data
-    size_t length = packet->dataLength;    // Récupère la taille de data
-
-    // Convertis data en un std::string
-    std::string dataStr = std::string(reinterpret_cast<char*>(data), length);
-    enet_packet_destroy(packet);
-
-    return dataStr;
-}
-
-void SendPacketToServer(ENetPeer* peer, int title, std::string content)
+void SendPacketToServer(ENetPeer* peer, int tag, std::string content)
 {
     // === Format the data ===
-    std::string dataStr{std::to_string(title) + "|" + content};
+    std::string dataStr{std::to_string(tag) + "|" + content};
     const char* data{dataStr.c_str()};
 
     // === Create the packet ===
@@ -69,6 +53,15 @@ std::string IntToFourDigitString(int number) {
     return os.str();
 }
 
+std::vector<std::string> SplitString(const std::string& str, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(str);
+    while (std::getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
 ////////////////////////////////////////////////
 
 
@@ -141,58 +134,40 @@ void NetworkInterface::SendNewPositionToServer(int myId, sf::Vector2f newPositio
     SendPacketToServer(_peer, SEND_NEW_POS, dataStr);
 }
 
-void NetworkInterface::AskIdToServer() {
-    SendPacketToServer(_peer, ASK_ID, "null");
-}
-
-void NetworkInterface::AskIdsAllPlayerConnected() {
-    SendPacketToServer(_peer, ASK_PLAYERS_ALREADY_CONNECTED, "null");
-}
-
 
 // === Events management ===
-void NetworkInterface::UpdateReceivedEvents()
+std::vector<ENetEvent> NetworkInterface::GetAllEvents()
 {
     ENetEvent event;
 
-    // === Vide le tableau de packet ===
-    _packetsArray.clear();
+    // === Vide le tableau d'events ===
+    _eventsArray.clear();
 
     // === Add all the events to the array ===
     while (enet_host_service(_client, &event, 0) > 0)
     {
-        switch (event.type) {
-            case ENET_EVENT_TYPE_CONNECT:
-                printf("> Connection to server succeeded.\n");
-                AskIdToServer();
-                AskIdsAllPlayerConnected();
-                break;
-
-            case ENET_EVENT_TYPE_RECEIVE:
-                _packetsArray.push_back(event.packet);
-                break;
-
-            case ENET_EVENT_TYPE_DISCONNECT:
-                printf("> Disconnected from server.\n");
-                _peer = nullptr;
-                break;
-
-            default:
-                printf("Evenement inconnu");
-                exit(EXIT_FAILURE);
-        }
+        _eventsArray.push_back(event); // ajouter au tableau l'adresse de event
     }
+
+    return _eventsArray;
 }
 
-std::vector<std::string> NetworkInterface::GetAllReceivedPackets()
+std::vector<std::string> NetworkInterface::OpenPacket(ENetPacket*& packet)
 {
-    std::vector<std::string> result;
+    // Récupère le paquet
+    unsigned char* data = packet->data;      // Récupère le contenu de data
+    size_t length = packet->dataLength;    // Récupère la taille de data
 
-    for(ENetPacket* packet : _packetsArray)
-    {
-        std::string openedPacket{OpenPacket(packet)};
-        result.push_back(openedPacket);
-    }
+    // Convertis data en un std::string et detruit le packet
+    std::string dataStr = std::string(reinterpret_cast<char*>(data), length);
+    enet_packet_destroy(packet);
 
-    return result;
+    // Convertis la chaine de caratère en un tableau contenant les données
+    std::vector<std::string> content{SplitString(dataStr, '|')};
+
+    return content;
 }
+
+
+
+
