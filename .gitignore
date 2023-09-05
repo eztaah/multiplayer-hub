@@ -3,7 +3,9 @@ client/build/
 server/build/
 
 # Ignore the executable created
-client/bin/debug.exe
-client/bin/release.exe
+client/bin/debug1.exe
+client/bin/debug2.exe
+client/bin/debug3.exe
+client/bin/debug4.exe
+
 server/bin/debug.exe
-server/bin/release.exe
